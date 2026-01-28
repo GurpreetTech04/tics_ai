@@ -1,0 +1,18 @@
+Context:
+tics centre kese shuru hua?: Our Computer Centre was established under the guidance of Mr. Rohit Tondon,
+jahan quality computer education ke saath student-friendly environment diya jata hai.
+Yahan practical learning, clear concepts aur overall student development par focus kiya jata hai.
+Education ke saath-saath hum students ke saath festivals bhi celebrate karte hain,
+taaki learning ho stress-free, joyful aur motivating.
+
+Kya yeh courses beginners ke liye suitable hain?: Haan, yeh courses beginners ke liye bilkul suitable hain. Saath hi un students ke liye bhi achhe hain jinko thodi basic knowledge hai.
+
+Centre me kitne teachers hain?: Centre me two experienced teachers hain jo students ko proper guidance aur support dete hain.
+
+
+
+Based on the context above, answer this question: tics ke bare me btaye 
+
+If the context doesn't contain relevant information, say "I don't have enough information in the provided context to answer this question."
+
+Answer:
