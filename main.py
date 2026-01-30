@@ -1,5 +1,5 @@
 import streamlit as st
-# from rag_system import rag_system
+from rag_system import rag_system
 import time
 import pickle
 import os
@@ -33,6 +33,25 @@ def load_saved_chats():
         st.session_state.saved_chats = {}
 # Call the function to load saved chats
 load_saved_chats()
+
+
+# Add this function delete chat with confirmation
+def delete_chat_with_confirmation(chat_id, chat_name):
+    """Delete chat with confirmation"""
+    if st.session_state.get(f"confirm_delete_{chat_id}", False):
+        # Second click - actually delete
+        if chat_id in st.session_state.saved_chats:
+            del st.session_state.saved_chats[chat_id]
+            save_chats_to_file()
+            st.success(f"Deleted '{chat_name}'")
+            # Clear the confirmation flag
+            st.session_state.pop(f"confirm_delete_{chat_id}", None)
+            time.sleep(0.5)
+            st.rerun()
+    else:
+        # First click - ask for confirmation
+        st.session_state[f"confirm_delete_{chat_id}"] = True
+        st.rerun()
 
 
 # Save chats to file
@@ -94,77 +113,74 @@ with st.sidebar:
         st.session_state.current_chat_id = datetime.now().strftime("%Y%m%d_%H%M%S")
         st.rerun()
         
-        # Save Current oh te mai dasda 
-        if st.button("💾 Save Current Chat", use_container_width=True):
-            if st.session_state.chat_history:
-                chat_name = f"Chat_{len(st.session_state.saved_chats) + 1}"
-                st.session_state.saved_chats[st.session_state.current_chat_id] = {
-                    "name": chat_name,
-                    "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
-                    "messages": st.session_state.chat_history.copy(),
-                    # "background": background,
-                    # "theme_color": theme_color
-                }
-                save_chats_to_file()
-                st.success(f"Chat '{chat_name}' saved!")
-            else:
-                st.warning("No messages to save!")
-        
-        # Load Saved Chats 
-        st.divider()
-        st.subheader("📂 Saved Chats")
-        
-        # List saved chats with load and delete options
-        if st.session_state.saved_chats:
-            for chat_id, chat_info in st.session_state.saved_chats.items():
-                
-                with st.container(border=True):
-                    chat_name = chat_info.get('name', 'Chat')
-                    chat_date = chat_info.get('date', '')
-                    if st.button(f"📝 {chat_name}", 
-                            key=f"load_{chat_id}", 
-                            use_container_width=True):
-                        st.session_state.chat_history = chat_info.get("messages", [])
-                        st.session_state.current_chat_id = chat_id
-                        # Note: Can't automatically set color pickers, but can show info
-                        st.info(f"Loaded: {chat_name} ({len(chat_info.get('messages', []))} messages)")
-                        col1, col2 = st.columns(2)
-                        with col1:
-                            # delete chat button
-                            if st.button("🗑️", key=f"delete_{chat_id}"):
-                                if chat_id in st.session_state.saved_chats:
-                                    del st.session_state.saved_chats[chat_id]
-                                    save_chats_to_file()
-                                    st.rerun()
-                        with col2:
-                            if st.button("📋", key=f"copy_{chat_id}", help="Copy chat ID"):
-                                st.code(chat_id)
-        else:
-            st.write("No saved chats yet")
-        
-        # Chat Statistics
-        st.divider()
-        st.subheader("📊 Statistics")
-        st.write(f"Current Chat: {len(st.session_state.chat_history)} messages")
-        st.write(f"Saved Chats: {len(st.session_state.saved_chats)}")
-        
-        # Export Chat as JSON
-        if st.session_state.chat_history:
-            st.divider()
-            chat_json = json.dumps({
-                "chat_id": st.session_state.current_chat_id,
-                "timestamp": datetime.now().isoformat(),
-                "messages": st.session_state.chat_history
-            }, indent=2)
-            
-            st.download_button(
-                label="📥 Export Chat",
-                data=chat_json,
-                file_name=f"chat_{st.session_state.current_chat_id}.json",
-                mime="application/json",
-                use_container_width=True
-            )
+    # Save Current oh te mai dasda eh shoha
+    # if st.button("💾 Save Current Chat", use_container_width=True):
+    if st.session_state.chat_history:
+        chat_name = f"Chat_{len(st.session_state.saved_chats) + 1}"
+        st.session_state.saved_chats[st.session_state.current_chat_id] = {
+            "name": chat_name,
+            "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "messages": st.session_state.chat_history.copy(),
+            # "background": background,
+            # "theme_color": theme_color
+        }
+        save_chats_to_file()
+        st.success(f"Chat '{chat_name}' saved!")
+    else:
+        st.warning("No messages to save!")
     
+    # Load Saved Chats 
+    st.divider()
+    st.subheader("📂 Saved Chats")
+    
+    # List saved chats with load and delete options
+    if st.session_state.saved_chats:
+        for chat_id, chat_info in st.session_state.saved_chats.items():
+            
+            # In your saved chats loop:
+            with st.container(border=True):
+                chat_name = chat_info.get('name', 'Chat')
+                chat_date = chat_info.get('date', '')
+                
+            
+                if st.button(f"📝 {chat_date}", 
+                           key=f"load_{chat_id}", 
+                           use_container_width=True):
+                    st.session_state.chat_history = chat_info.get("messages", [])
+                    st.session_state.current_chat_id = chat_id
+                    st.rerun()
+                if st.button("❌", key=f"confirm_{chat_id}", use_container_width=True):
+                        if chat_id in st.session_state.saved_chats:
+                            del st.session_state.saved_chats[chat_id]
+                            save_chats_to_file()
+                            st.session_state.pop(f"confirm_delete_{chat_id}", None)
+                            st.rerun()
+    else:
+        st.write("No saved chats yet")
+    
+    # Chat Statistics
+    st.divider()
+    st.subheader("📊 Statistics")
+    st.write(f"Current Chat: {len(st.session_state.chat_history)} messages")
+    st.write(f"Saved Chats: {len(st.session_state.saved_chats)}")
+    
+    # Export Chat as JSON
+    if st.session_state.chat_history:
+        st.divider()
+        chat_json = json.dumps({
+            "chat_id": st.session_state.current_chat_id,
+            "timestamp": datetime.now().isoformat(),
+            "messages": st.session_state.chat_history
+        }, indent=2)
+        
+        st.download_button(
+            label="📥 Export Chat",
+            data=chat_json,
+            file_name=f"chat_{st.session_state.current_chat_id}.json",
+            mime="application/json",
+            use_container_width=True
+        )
+
     # st.button("Search chats", use_container_width=True)
     # st.button("Images", use_container_width=True)
     # st.button("Apps", use_container_width=True)
@@ -212,9 +228,11 @@ st.markdown(f'''
         font-size: 18px;
         font-weight: bold;
     }}
-    
-    
-
+    /*
+    .st-emotion-cache-18kf3ut{{ 
+        display: none;
+    }} 
+*/
 .navbar {{
     background-color: #222;
     color: white;
@@ -266,11 +284,12 @@ st.logo(HORIZONTAL_RED, icon_image=ICON_RED,size="large")
 
 
 def chat_stream(prompt):
-    # response = rag_system.get_response(prompt)
-    response = f"This is a simulated response to your prompt: {prompt}"
-    for char in response:
-        yield char
-        time.sleep(0.02)
+    with st.spinner("Thinking...", show_time=True):
+        response = rag_system.get_response(prompt)
+    # response = f"This is a simulated response to your prompt: {prompt}"
+        for char in response:
+            yield char
+            time.sleep(0.02)
 
 
 def save_feedback(index):
@@ -310,8 +329,7 @@ if prompt := st.chat_input("Say something"):
     })
     
     # Generate assistant response
-    with st.spinner("Thinking...", show_time=True):
-        time.sleep(2)
+  
     
     with st.chat_message("assistant"):
         response = st.write_stream(chat_stream(prompt))

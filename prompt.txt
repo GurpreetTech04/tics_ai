@@ -1,17 +1,34 @@
 Context:
-tics centre kese shuru hua?: Our Computer Centre was established under the guidance of Mr. Rohit Tondon,
-jahan quality computer education ke saath student-friendly environment diya jata hai.
-Yahan practical learning, clear concepts aur overall student development par focus kiya jata hai.
-Education ke saath-saath hum students ke saath festivals bhi celebrate karte hain,
-taaki learning ho stress-free, joyful aur motivating.
+Courses Offered: Basic Computer
+
+Computer Fundamentals
+
+Web Designing
+
+Python
+
+Communication Skills
+
+Basic Tally
+
+C / C++
+
+Advanced Excel
 
-Kya yeh courses beginners ke liye suitable hain?: Haan, yeh courses beginners ke liye bilkul suitable hain. Saath hi un students ke liye bhi achhe hain jinko thodi basic knowledge hai.
+Are the courses suitable for beginners?: Yes, all courses are designed for beginners as well as learners with basic knowledge.
 
-Centre me kitne teachers hain?: Centre me two experienced teachers hain jo students ko proper guidance aur support dete hain.
+Course duration (months / weeks): "Basic Computer : 1 Month / 3 Months
+ DCA : 1 Year
+ Tally : 3 Months
+ MS Office : 1 Month
+ Web Designing : 6 Months
+ Graphic Designing : 3 Months
+ C/C++ : 3 Months
+"
 
 
 
-Based on the context above, answer this question: tics ke bare me btaye 
+Based on the context above, answer this question: courses list
 
 If the context doesn't contain relevant information, say "I don't have enough information in the provided context to answer this question."
 
